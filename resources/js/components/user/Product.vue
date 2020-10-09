@@ -4,6 +4,7 @@
       <v-col cols="12" sm="6" md="5">
         <v-carousel hide-delimiters>
           <v-carousel-item
+          style=""
             v-for="(item, i) in item.images"
             :key="i"
             :src="item.path"
@@ -14,7 +15,6 @@
         <h2 class="text-h5 mb-3" style="text-transform: uppercase">
           {{ item.name }}
         </h2>
-        <h3 class="text-subtitle-1 mb-3 primary--text">{{ item.price }} €</h3>
         <hr
           style="
             background: #efefef;
@@ -31,15 +31,24 @@
         </h3>
         <v-row v-if="this.stock_count()">
           <v-col cols="12">
-            <p>Variation Value</p>
+            <p>Variation Value Name</p>
             <v-btn-toggle v-model="selected" rounded>
               <template v-for="value in item.variationValues">
+                 <!-- Price:<strong class=""
+                    >{{ value.pivot.price }}€</strong> -->
                 <v-btn :value="value.variation_id">
-                  {{ value.name }}
+                  {{ value.name }} 
                 </v-btn>
+               
               </template>
-              
             </v-btn-toggle>
+           <div class="row mt-3">
+              <p>Price for variations</p>
+            <div  v-for="value in item.variations">,
+              <strong>{{value.pivot.price}}</strong>
+            </div>
+           </div>
+
           </v-col>
 
           <v-col cols="12" md="3">
@@ -102,7 +111,7 @@ export default {
   data() {
     return {
       item: null,
-      selected: null,
+      selected: "",
       quantity: 1,
       count: "",
     };
@@ -110,7 +119,7 @@ export default {
 
   computed: {
     canAddToCart() {
-      return this.selected && this.quantity < this.item.stock_quantity;
+     // return this.selected && this.quantity < this.item.stock_quantity;
     },
   },
 
@@ -125,13 +134,10 @@ export default {
       this.quantity++;
     },
     stock_count() {
-      if(this.item.variation_stock=='0')
-      {
+      if (this.item.variation_stock == "0") {
         return false;
-      }
-      else
-      {
-        return true
+      } else {
+        return true;
       }
       //return this.item.variation_stock;
     },
@@ -143,7 +149,6 @@ export default {
     },
 
     initialize() {
-        
       axios
         .get("/back/shop/" + this.item_id)
         .then((response) => {
@@ -153,15 +158,14 @@ export default {
           console.log(error.message);
         });
     },
-
     formData() {
       return {
-        product: this.item_id,
+        product_id: this.item_id,
         variation_id: this.selected,
         quantity: this.quantity,
       };
     },
-    countcart() {   
+    countcart() {
       axios.get("/back/getcount").then((response) => {
         console.log("count");
       });

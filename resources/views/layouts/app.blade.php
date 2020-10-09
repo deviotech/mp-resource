@@ -29,7 +29,7 @@
                 <v-container>
                     <v-row align="center" justify="center">
                         <a href="/">
-                            <v-img max-width="162" src="{{ asset('storage/Logo-Original.png') }}" contain></v-img>
+                            <v-img max-width="162" src="{{ asset('/Logo-Original.png') }}" contain></v-img>
                         </a>
                         <v-spacer></v-spacer>
 
@@ -70,7 +70,7 @@
 
                 <v-row justify="center" no-gutters>
                     <v-col cols="12" md="3" offset-md="1">
-                        <v-img class="mt-2" max-width="162" src="{{ asset('storage/Logo-Original.png') }}"></v-img>
+                        <v-img class="mt-2" max-width="162" src="{{ asset('/Logo-Original.png') }}"></v-img>
                     </v-col>
                     <v-col cols="12" md="5">
                         <v-btn href="{{ route('product') }}" text rounded>

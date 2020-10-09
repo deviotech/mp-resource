@@ -24,8 +24,8 @@
                                   :items-per-page="99"
                                   dense
                                   hide-default-footer>
-                        <template v-slot:item.price="{ item }">{{ item.product.price }} €</template>
-                        <template v-slot:item.total="{ item }">{{ item.quantity * item.product.price }} €</template>
+                        <template v-slot:item.price="{ item }">{{ item.price }} €</template>
+                        <template v-slot:item.total="{ item }">{{ item.quantity * item.price }} €</template>
                     </v-data-table>
                 </td>
             </template>
@@ -69,12 +69,12 @@ export default {
             expanded: [
                 {
                     text: 'Product Name',
-                    value: 'product.name',
+                    value: 'product_name',
                     sortable: false,
                 },
                 {
-                    text: 'variation_value.name',
-                    value: 'variation_value.name',
+                    text: 'Variation',
+                    value: 'variation_value_name',
                     sortable: false,
                 },
                 {

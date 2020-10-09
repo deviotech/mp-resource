@@ -10,10 +10,10 @@
           class="elevation-1"
         >
           <template v-slot:item.price="{ item }"
-            >{{ item.product.price }} €</template
+            >{{ item.price }} €</template
           >
           <template v-slot:item.total="{ item }"
-            >{{ item.quantity * item.product.price }} €</template
+            >{{ item.quantity * item.price }} €</template
           >
           <template v-slot:item.actions="{ item }">
             <v-icon small @click="removeItem(item)"> mdi-delete </v-icon>
@@ -48,24 +48,19 @@
           </tbody>
         </table>
         <div>
-          <v-text-field
-            name="input-7-1"
-            filled
-            label="Read First"
-            auto-grow
-            value="Please Read First."
-          ></v-text-field>
-          <div class="ml-1 row">
-            <v-checkbox
-              v-model="checkbox"
-              :label="checkbox_value"
-            ></v-checkbox>
-             <v-btn
-            @click="makeOrder()"
-            :disabled="!hasItems"
-            class="btn btn-default float-right mt-3 mb-3"
-            >Pre Order</v-btn
-          >
+         <p class="row"><v-checkbox
+            v-model="checkbox_value"
+            class="mt-0"
+            @change="checking(this.checkbox_value)"
+          ></v-checkbox> I accept the  <strong> <a href="#">  Terms and Conditions</a></strong></p>
+          <div>
+            <div v-if="this.true_Value">
+              <v-btn
+                @click="makeOrder()"
+                :disabled="!hasItems"
+                class="btn btn-default float-right mt-2 mb-2"
+                >Pre Order</v-btn>
+            </div>
           </div>
         </div>
       </div>
@@ -83,12 +78,12 @@ export default {
       headers: [
         {
           text: "Product Name",
-          value: "product.name",
+          value: "product_name",
           sortable: false,
         },
         {
-          text: "variation_value.name",
-          value: "variation_value.name",
+          text: "variation value name",
+          value: "variation_value_name",
           sortable: false,
         },
         {
@@ -114,6 +109,8 @@ export default {
       ],
       items: [],
       product_detail: [],
+      checkbox_value: "",
+      true_Value: false,
     };
   },
 
@@ -122,7 +119,7 @@ export default {
       let total_total = 0;
 
       this.items.forEach((item) => {
-        total_total += item.quantity * item.product.price;
+        total_total += item.quantity * item.price;
       });
 
       return total_total;
@@ -133,7 +130,13 @@ export default {
         return item.id;
       });
     },
-
+    checking(value) {
+      if (value.checkbox_value == true) {
+        this.true_Value = true;
+      } else {
+        this.true_Value = false;
+      }
+    },
     hasItems() {
       return this.items[0].quantity > 0;
     },
@@ -142,17 +145,19 @@ export default {
   created() {
     this.initialize();
   },
+  mounted() {
+    this.checking();
+    this.initialize();
+  },
 
   methods: {
     initialize() {
       axios
         .get("/back/in-cart")
         .then((response) => {
-          console.log(response.data.data.product_id);
           this.items = response.data.data;
           this.product_detail = response.data.data.map((item) => {
             return (item = {
-              product_id: item.product_id,
               quantity: item.quantity,
             });
           });
@@ -180,7 +185,7 @@ export default {
       return {
         carts_id: this.cartIds,
         total_price: this.totalPrice,
-        product_id: this.product_detail,
+       // product_id: this.product_detail,
       };
     },
 

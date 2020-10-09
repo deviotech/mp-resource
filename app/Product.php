@@ -42,7 +42,7 @@ class Product extends Model implements HasMedia
 
     public function variation()
     {
-        return $this->belongsToMany(Variation::class, 'product_variation')->withPivot('stock_quantity');
+        return $this->belongsToMany(Variation::class, 'product_variation')->withPivot('stock_quantity','price');
     }
 
     public function attributeValues()

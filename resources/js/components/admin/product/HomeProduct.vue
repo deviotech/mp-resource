@@ -39,17 +39,13 @@
                       </v-col>
 
                       <v-col cols="12">
-                        <!-- <v-textarea
-                          v-model="editedItem.description"
-                          label="Description"
-                        ></v-textarea> -->
                         <vue-editor
                           v-model="editedItem.description"
                           label="Description"
                         ></vue-editor>
                       </v-col>
 
-                      <v-col cols="12" sm="6" md="6">
+                      <v-col cols="12" sm="12" md="12">
                         <v-file-input
                           v-model="editedItem.images"
                           name="images[]"
@@ -86,18 +82,6 @@
                           dense
                         ></v-select>
                       </v-col>
-
-                      <!-- <v-col cols="12" md="6">
-                        <v-select
-                          :rules="rules.select"
-                          v-model="editedItem.variation_id"
-                          :items="variations"
-                          name="variation"
-                          label="Variation"
-                          outlined
-                          dense
-                        ></v-select>
-                      </v-col> -->
                       <v-col cols="12">
                         <v-row>
                           <template v-for="attribute in attributes">
@@ -128,8 +112,7 @@
                       <v-col cols="12">
                         <v-row>
                           <template v-for="(variation, index) in variations">
-                           
-                            <v-col cols="12" md="4">
+                            <v-col cols="12" md="3">
                               <v-checkbox
                                 v-model="editedItem.product_variations.ids"
                                 color="primary"
@@ -137,7 +120,7 @@
                                 :label="variation.name"
                               ></v-checkbox>
                             </v-col>
-                            <v-col cols="12" md="4">
+                            <v-col cols="12" md="3">
                               <v-select
                                 :disabled="isSelectedForVariation(variation)"
                                 multiple
@@ -150,18 +133,29 @@
                                 dense
                               ></v-select>
                             </v-col>
-                            <v-col cols="12" md="4">
+                            <v-col cols="12" md="3">
                               <v-text-field
-                                v-model="editedItem.product_variations.stocks[index]"
+                                v-model="
+                                  editedItem.product_variations.stocks[index]
+                                "
                                 type="number"
                                 label="Stock"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="3">
+                              <v-text-field
+                                v-model="
+                                  editedItem.product_variations.prices[index]
+                                "
+                                type="number"
+                                label="Price"
                               ></v-text-field>
                             </v-col>
                           </template>
                         </v-row>
                       </v-col>
 
-                      <v-col cols="12" sm="6" md="4">
+                      <v-col cols="12" sm="12" md="12">
                         <v-text-field
                           :error="errors.sku"
                           :error-messages="errors.sku"
@@ -170,24 +164,6 @@
                           label="SKU"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="editedItem.price"
-                          type="number"
-                          step="0.01"
-                          label="Price"
-                        ></v-text-field>
-                      </v-col>
-                      <!-- <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          :error="errors.stock"
-                          :error-messages="errors.stock"
-                          :rules="rules.stock"
-                          v-model="editedItem.stock"
-                          type="number"
-                          label="Stock"
-                        ></v-text-field>
-                      </v-col> -->
 
                       <v-col cols="12" md="6">
                         <v-file-input
@@ -267,17 +243,21 @@ export default {
             value: "name",
           },
           {
-            text: "Variation Detail",
+            text: "Variation Values",
             value: "product_variations.variation_name",
           },
-
+          {
+            text: "Price Variation Values",
+            value: "product_variations.prices",
+          },
+          {
+            text: "Variation Values Stocks",
+            //value: "stock"
+            value: "product_variations.stocks",
+          },
           {
             text: "SKU",
             value: "sku",
-          },
-          {
-            text: "Price",
-            value: "price",
           },
           {
             text: "Category",
@@ -287,10 +267,6 @@ export default {
           {
             text: "Date",
             value: "date",
-          },
-          {
-            text: "Stock",
-            value: "stock"
           },
           {
             text: "Options",
@@ -311,7 +287,6 @@ export default {
         name: "",
         category_id: null,
         description: "",
-        //variation_id: null,
         brand_id: null,
         attribute: {
           ids: [],
@@ -321,9 +296,8 @@ export default {
           ids: [],
           values: [],
           stocks: [],
+          prices: [],
         },
-        price: 0,
-        //stock: 0,
         sku: null,
         images: [],
         brochure: "",
@@ -334,22 +308,21 @@ export default {
         name: "",
         category_id: null,
         description: "",
-        //variation_id: null,
         brand_id: null,
         attribute: {
           ids: [],
           values: [],
         },
-        price: 0,
         sku: null,
         images: [],
         brochure: null,
         analysis: null,
         product_variations: {
-           ids: [],
-           values: [],
-           stocks: [],
-         },
+          ids: [],
+          values: [],
+          stocks: [],
+          prices: [],
+        },
       },
 
       rules: {
@@ -363,17 +336,9 @@ export default {
           (value) =>
             value.length <= 255 || "SKU must be less than 255 characters long",
         ],
-        price: [
-          (value) => !!value || "Price field is required",
-          (value) => !isNaN(parseFloat(value)) || "Price must be number",
-          (value) => value > 0 || "Price must be grater then 0",
-          (value) =>
-            value.length <= 255 ||
-            "Price must be less than 255 characters long",
-        ],
         fileRules: [
-          v => !!v || 'File is required',
-          v => (v && v.length > 0) || 'File is required',
+          (v) => !!v || "File is required",
+          (v) => (v && v.length > 0) || "File is required",
         ],
       },
     };
@@ -513,10 +478,13 @@ export default {
       if (selected2) {
         item.variation_values.forEach((value) => {
           if (this.editedItem.product_variations.values.includes(value.id)) {
-            let index = this.editedItem.product_variations.values.indexOf(value.id);
+            let index = this.editedItem.product_variations.values.indexOf(
+              value.id
+            );
             if (index > -1) {
               this.editedItem.product_variations.values.splice(index);
               this.editedItem.product_variations.stocks.splice(index);
+              this.editedItem.product_variations.prices.splice(index);
             }
           }
         });
@@ -533,7 +501,7 @@ export default {
     deleteItem(item) {
       const index = this.table.data.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
-        axios.delete("/back/products-delete/"+ item.id).then((respones) => {
+        axios.delete("/back/products-delete/" + item.id).then((respones) => {
           this.initialize();
         });
     },
@@ -578,15 +546,18 @@ export default {
         });
       }
 
-       if (this.editedItem.product_variations.stocks.length) {
+      if (this.editedItem.product_variations.stocks.length) {
         this.editedItem.product_variations.stocks.forEach((stocks, index) => {
           form.append("variation[stocks][" + index + "]", stocks);
         });
       }
+      if (this.editedItem.product_variations.prices.length) {
+        this.editedItem.product_variations.prices.forEach((prices, index) => {
+          form.append("variation[prices][" + index + "]", prices);
+        });
+      }
 
       form.append("sku", this.editedItem.sku);
-      form.append("price", this.editedItem.price);
-     // form.append("stock", this.editedItem.stock);
       form.append("images", this.editItem.images);
       form.append("brochure", this.editItem.brochure);
       form.append("analysis", this.editItem.analysis);
@@ -621,11 +592,15 @@ export default {
       if (this.$refs.modal.validate()) {
         if (this.editedIndex > -1) {
           axios
-            .post("/back/update-products/"+this.editedItem.id, this.formData(), {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            })
+            .post(
+              "/back/update-products/" + this.editedItem.id,
+              this.formData(),
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            )
             .then((response) => {
               this.initialize();
               this.close();

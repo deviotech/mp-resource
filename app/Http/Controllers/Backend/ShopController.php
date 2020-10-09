@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Cart;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
-use App\Order;
+use App\UserOrder;
 use App\Product;
 use App\Variation;
 use App\VariationValue;
@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use DB;
+use phpDocumentor\Reflection\PseudoTypes\False_;
 
 class ShopController extends Controller
 {
@@ -33,30 +34,54 @@ class ShopController extends Controller
 
     public function inCart()
     {
-        return response(['data' => Auth::user()->carts->where('order_id', null)->load(['product', 'variation_value'])->toArray()]);
+        return response(['data' => Auth::user()->carts->where('order_id', null)->toArray()]);
     }
 
     public function addToCart(Request $request)
     {
-        $data = [
-            'product_id' => $request->get('product'),
-            'variation_value_id' => $request->get('variation_id'),
-            'quantity' => $request->get('quantity'),
-        ];
-
+        $product_id = $request->product_id;
         $variation_id = $request->variation_id;
-
-        $var = DB::table('product_variation')->where('variation_id', $variation_id)->where('product_id', $request->product)->first();
-        
-        $stock = $var->stock_quantity;
         $quantity = $request->quantity;
+
+        // $var_for_price = DB::table('variation_value_product')->where('variation_value_id', $variation_id)->where('product_id', $request->product)->first();
+        // $price= $var_for_price->price;
+
+        $var = DB::table('product_variation')->where('variation_id', $variation_id)->where('product_id', $product_id)->first();
+        $stock = $var->stock_quantity;
         if ($stock >= $quantity) {
             DB::table('product_variation')->where('id', $var->id)->update(
                 [
                     'stock_quantity' => $var->stock_quantity - $request->quantity,
                 ]
             );
-            Auth::user()->carts()->create($data);
+
+
+            $variation = DB::table('variation_values')->where('variation_id', $variation_id)->first();
+            $variation_value_name =$variation->name;
+            $prices = DB::table('product_variation')->where('variation_id', $variation_id)->where('product_id', $product_id)->first();
+            $price = $prices->price;
+            $product = DB::table('products')->where('id', $product_id)->first();
+            $product_name = $product->name;
+
+            $cart = DB::table('carts')->where('product_name', $product_name)->where('variation_value_name',$variation_value_name)->first();
+            $cart_id = $cart->id;
+            if($cart_id)
+            {
+                $carts = Cart::find($cart_id);
+                $carts->quantity +=1;
+                $carts->save();
+            }
+           else
+           {
+            Auth::user()->carts()->create([
+                'user_id' => Auth::user()->id,
+                'quantity' => $quantity,
+                'product_name' => $product_name,
+                'variation_value_name' => $variation_value_name,
+                'stock' => $stock,
+                'price' => $price
+            ]);
+           }
             $count = Auth::user()->inCart()->count();
         } else {
             return response([
@@ -79,10 +104,6 @@ class ShopController extends Controller
 
     public function makeOrder(Request $request)
     {
-        // $prod = $request->get('product_id');
-        // dd($prod);
-        // dd($request->all());
-
         $carts_id = $request->get('carts_id');
 
         $data = [
@@ -90,18 +111,39 @@ class ShopController extends Controller
             'total_price' => $request->get('total_price'),
         ];
 
-        $order = Order::create($data);
+        $order = UserOrder::create($data);
 
-        Cart::whereIn('id', $carts_id)->update(['order_id' => $order->id]);
+        $cart = Cart::whereIn('id', $carts_id)->update(['order_id' => $order->id]);
+        $user_name = Auth::user()->username;
+        $user_email = Auth::user()->email;
 
 
+        sendMail([
+            'view' => 'email.PreOrder_mail_to_admin',
+            'to' => 'admin@gmail.com',
+            'subject' => 'New Order is created',
+            'data' => [
+                'order' => $order,
+                'name' => $user_name,
+                'user_email' => $user_email
+            ]
+        ]);
+        sendMail([
+            'view' => 'email.PreOrder_mail_to_customer',
+            'to' => $user_email,
+            'subject' => 'Your Order is created',
+            'data' => [
+                'order' => $order,
+                'name' => $user_name,
+            ]
+        ]);
         return response(['Order created successfully']);
         //return ['redirect' => route('user.preorder')];
     }
 
     public function getOrders()
     {
-        return response(['data' => Auth::user()->orders->load(['carts.product', 'carts.variation_value'])->toArray()]);
+        return response(['data' => Auth::user()->userorders->load(['carts'])->toArray()]);
     }
     public function getcount()
     {

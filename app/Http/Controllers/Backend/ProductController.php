@@ -33,7 +33,8 @@ class ProductController extends Controller
                     'ids' => $prod->variation->pluck('id'),
                     'values' => $prod->variatonValues->pluck('id'),
                     'stocks' => $prod->variation()->pluck('stock_quantity'),
-                    'variation_name' =>$prod->variatonValues->pluck('name'),
+                    'prices' => $prod->variation()->pluck('price'),
+                    'variation_name' => $prod->variatonValues->pluck('name'),
                 ];
                 return $prod;
             })->toArray();
@@ -48,6 +49,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->all());
         $attributes = $request->get('attribute');
         $variation = $request->get('variation');
 
@@ -86,14 +88,18 @@ class ProductController extends Controller
 
         $stock_qty = [];
         for ($i = 0; $i < sizeof($variation['ids']); $i++) {
-            $stock_qty[$variation['ids'][$i]] = ['stock_quantity' => $variation['stocks'][$i]];
+            $stock_qty[$variation['ids'][$i]] = [
+                'stock_quantity' => $variation['stocks'][$i],
+                'price' => $variation['prices'][$i]
+            ];
         }
 
         $product->attributes()->attach($attributes['ids']);
         $product->attributeValues()->attach($attributes['values']);
 
-        $product->variation()->attach($stock_qty);
         $product->variatonValues()->attach($variation['values']);
+
+        $product->variation()->attach($stock_qty);
 
         return response('Product created');
     }
@@ -112,7 +118,7 @@ class ProductController extends Controller
                 $path = 'images/multiple-images' . $name;
                 $brochure->move('images/multiple-images', $name);
                 $product->where('name', '=', 'brochure')->update([
-                  'brochure' =>  $name,
+                    'brochure' =>  $name,
                 ]);
             }
 
@@ -123,7 +129,7 @@ class ProductController extends Controller
                 $analysis->move('images/multiple-images', $analysis_name);
                 $product->where('name', '=', 'analysis')->update([
                     'analysis' =>  $analysis_name,
-                  ]);
+                ]);
             }
 
             $data = [
@@ -162,11 +168,17 @@ class ProductController extends Controller
                 $stock_qty[$variation['ids'][$i]] = ['stock_quantity' => $variation['stocks'][$i]];
             }
 
+            $prices = [];
+            for ($i = 0; $i < sizeof($variation['ids']); $i++) {
+                $prices[$variation['values'][$i]] = ['price' => $variation['prices'][$i]];
+            }
+
             $product->variation()->detach($product->variation->pluck('id'));
             $product->variatonValues()->detach($product->variatonValues->pluck('id'));
 
             $product->variation()->attach($stock_qty);
             $product->variatonValues()->attach($variation['values']);
+            $product->variation()->attach($prices);
 
             return response('Product updated');
         } catch (\Exception $exception) {

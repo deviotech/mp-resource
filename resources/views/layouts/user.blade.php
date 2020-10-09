@@ -333,8 +333,8 @@
                     <div class="row">
                         <div class="col-md-3 first mt-2">
                             <a href="/">
-                                <v-img max-width="182" src="https://mp-resource.shop/wp-content/uploads/2019/12/Logo-white-300x134.png" contain></v-img>
-                                <v-img max-width="160" class="mt-2 ml-2" src="https://mp-resource.shop/wp-content/uploads/2019/12/MPR-Canna-white-200x32.png" contain></v-img>
+                                <v-img max-width="182" src="/Logo-white-300x134.png" contain></v-img>
+                                <v-img max-width="160" class="mt-2 ml-2" src="/MPR-Canna-white-200x32.png" contain></v-img>
 
                             </a> </div>
                         <div class="col-md-3 ">

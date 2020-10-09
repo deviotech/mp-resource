@@ -71,15 +71,7 @@
               >
             </v-img>
 
-            <v-card-subtitle class="pb-0">{{ item.price }} €</v-card-subtitle>
-
             <v-card-actions>
-              <!-- <v-btn color="orange" text> Ausführung wählen </v-btn> -->
-              <v-row justify="center" class="pr-3">
-                <a text :href="'/shop/product/' + item.id">
-                  Ausführung wählen
-                </a>
-              </v-row>
               <v-row justify="center" class="pr-3">
                 <a text :href="'/shop/product/' + item.id"> Details </a>
               </v-row>
