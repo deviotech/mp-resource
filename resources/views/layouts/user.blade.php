@@ -287,7 +287,7 @@
                         <v-btn href="/admin/product" text class="text--secondary">
                             Admin</v-btn>
                         @endif
-                        <v-btn href="#" text class="text--secondary">
+                        <v-btn href="{{ route('user.dashboard') }}" text class="text--secondary">
                             My Account</v-btn>
                         <v-btn @click="logout()" text class="text--secondary">
                             Logout</v-btn>

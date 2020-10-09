@@ -26,6 +26,9 @@ Route::middleware(['auth','verified'])->group(function () {
         Route::get('shop/product/{product}', 'UserController@product')->name('shop.product');
         Route::get('vorbestellungen/my-pre-orders', 'UserController@preorder')->name('preorder');
         Route::get('warenkorb', 'UserController@cart')->name('cart');
+        Route::get('dashboard', 'UserDashboardController@index')->name('dashboard');
+        Route::get('delete-account', 'UserDashboardController@delete')->name('delete.account');
+        Route::post('user/update', 'UserDashboardController@update')->name('profile.update');
     });
 
     Route::middleware(['isAdmin'])->group(function () {
@@ -51,6 +54,13 @@ Route::middleware(['auth','verified'])->group(function () {
             Route::resource('products', 'ProductController');
             Route::resource('brands','BrandController');
             Route::resource('orders', 'OrderController');
+            Route::post('update-products/{id?}', 'ProductController@update')->name('update.product');
+            Route::delete('products-delete/{id}','ProductController@destroy')->name('products-delete');
+            Route::post('users/{user}/activate', 'UserController@activate');
+            Route::post('users/{user}/deactivate', 'UserController@deactivate');
+            Route::get('deleteUsers', 'UserController@deleteAllUsers');
+            Route::post('users/{user}/delete', 'UserController@delete');
+            Route::get('declinedUsers', 'UserController@declinedUsers');
             Route::post('update-products/{id?}', 'ProductController@update')->name('update.product');
             Route::delete('products-delete/{id}','ProductController@destroy')->name('products-delete');
             Route::post('users/{user}/activate', 'UserController@activate');

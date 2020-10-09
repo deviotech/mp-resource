@@ -64,9 +64,11 @@ class ShopController extends Controller
             $product_name = $product->name;
 
             $cart = DB::table('carts')->where('product_name', $product_name)->where('variation_value_name',$variation_value_name)->first();
-            $cart_id = $cart->id;
-            if($cart_id)
+            //$cart_id = $cart->id;
+            //dd($cart);
+            if($cart)
             {
+                $cart_id = $cart->id;
                 $carts = Cart::find($cart_id);
                 $carts->quantity +=1;
                 $carts->save();

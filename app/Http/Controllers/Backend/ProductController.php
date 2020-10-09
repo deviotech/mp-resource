@@ -69,7 +69,7 @@ class ProductController extends Controller
             'category_id' => $request->get('category_id'),
             'description' => $request->get('description'),
             'brand_id' => $request->get('brand_id'),
-            'price' => $request->get('price'),
+            //'price' => $request->get('price'),
             'sku' => $request->get('sku'),
             'brochure' =>  $name,
             'analysis' => $analysis_name,

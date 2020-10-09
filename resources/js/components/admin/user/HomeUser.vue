@@ -1,6 +1,16 @@
 <template>
     <v-container>
-        <v-data-table show-select
+        
+
+        <nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Users</a>
+    <a class="nav-item nav-link" id="nav-declined-tab" @click="declinedUsers()" data-toggle="tab" href="#nav-declined" role="tab" aria-controls="nav-declined" aria-selected="false">Declined Users</a>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+      <v-data-table show-select
                       :headers="table.headers"
                       :items="table.data"
                       :items-per-page="5"
@@ -29,6 +39,42 @@
                 <v-btn small dense v-else @click="activateAcc(item)">Activate</v-btn>
             </template>
         </v-data-table>
+  </div>
+  <!-- declined users -->
+
+    <div class="tab-pane fade" id="nav-declined" role="tabpanel" aria-labelledby="nav-declined-tab">
+            <div class="text-right pt-2 pb-2">
+                <v-btn small dense v-if="deleteAllBtn" @click="deleteAllDeclinedUsers()" onclick="return confirm('Are you sure you want to delete all declined users?')">Delete All Declined Users Data</v-btn>
+            </div>
+        <table class="table table-md p-3" style="border:1px solid #ccc;">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Username</th>
+                <th scope="col">Phone No.</th>
+                <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, key, index) in declinedData.data" :key="item.id">
+                <th scope="row">{{key +1 }}</th>
+                <td>{{item.first_name}} {{item.last_name}}</td>
+                <td>{{item.email}}</td>
+                <td>{{item.phone}}</td>
+                <td><v-btn onclick="return confirm('Are you sure?')" @click="deleteUser(item)" small dense>Delete</v-btn></td>
+                </tr>
+            </tbody>
+            </table>
+
+
+  </div>
+
+  <!-- end declined users -->
+</div>
+
+
+        
     </v-container>
 </template>
 
@@ -38,6 +84,9 @@ export default {
 
     data() {
         return {
+            tab: null,
+            declinedData: [],
+            deleteAllBtn:false,
             table: {
                 headers: [
                     {
@@ -101,7 +150,7 @@ export default {
     },
 
     created() {
-        this.initialize()
+        this.initialize();
     },
 
     methods: {
@@ -121,6 +170,19 @@ export default {
             })
         },
 
+        declinedUsers() {
+            axios.get('/back/declinedUsers/').then(response => {
+                console.log(response.data.data.length);
+                if(response.data.data.length > 0){
+                    this.deleteAllBtn=true;
+                }
+                else{
+                    this.deleteAllBtn=false;
+                }
+                this.declinedData = response.data;  
+            })
+        },
+
         showFiles(item) {
             item.show_files = !item.show_files;
         },
@@ -135,6 +197,18 @@ export default {
             axios.post('/back/users/' + item.id + '/deactivate').then(response => {
                 item.active = false;
             });
+        },
+        deleteUser(item) {
+            axios.post('/back/users/' + item.id + '/delete').then(response => {
+                this.declinedUsers();
+            });
+        },
+
+        deleteAllDeclinedUsers() {
+            axios.get('/back/deleteUsers/').then(response => {
+                this.declinedUsers();
+                this.deleteAllBtn=false;
+            })
         },
     },
 }

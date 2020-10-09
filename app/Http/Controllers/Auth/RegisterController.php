@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -106,6 +107,16 @@ class RegisterController extends Controller
             'fax' => $data['fax'],
             'subscribed' => $data['subscribe'] ? 1 : 0,
         ]);
+
+        sendMail([
+            'view' => 'email.user_register',
+            'to' => $data['email'],
+            'subject' => 'Welcome to Medical Pharma',
+            'from' => 'registrierung@mp-resource.shop',
+            'name' => 'MP Resource Shop',
+            'data' => []
+          ]);
+
 
         $user->addMedia($data['file1']->path())
             ->setFileName($data['file1']->getClientOriginalName())

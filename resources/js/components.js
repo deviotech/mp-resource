@@ -5,7 +5,7 @@ import Toasted from 'vue-toasted';
 import VueSanitize from "vue-sanitize";
 import dropdown from 'vue-dropdowns';
 
-
+import Profile from "./components/user/profile";
 import Login from './components/auth/Login.vue';
 import Register from './components/auth/Register.vue';
 
@@ -63,6 +63,7 @@ Vue.component('show-variation', ShowVariation);
 Vue.component('home-variation_value', HomeVariation_value);
 
 Vue.component('home-order', HomeOrder);
+Vue.component('profile', Profile);
 
 Vue.component('shop', Shop);
 

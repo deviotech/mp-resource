@@ -60,9 +60,20 @@ class UserController extends Controller
 
     public function activate(User $user)
     {
+
         $user->active = true;
 
         $user->save();
+
+        sendMail([
+            'view' => 'email.user_active',
+            'to' => $user->email,
+            'subject' => 'Your Account has Been Activated',
+            'from' => 'verifizierung@mp-resource.shop',
+            'name' => 'MP Resource Shop',
+            'data' => []
+          ]);
+
 
         return response(['data' => $user, 'message' => 'Account enabled']);
     }
@@ -75,4 +86,23 @@ class UserController extends Controller
 
         return response(['data' => $user, 'message' => 'Account disabled']);
     }
+
+    public function declinedUsers(){
+        $users = User::where('active', 0)->get();
+
+        return response(['data' => $users]);
+        
+    }
+    public function delete(User $user)
+    {
+        $user->delete();
+        return response(['message' => 'Account deleted']);
+    }
+
+    public function deleteAllUsers()
+    {
+        User::where('active', 0)->delete();
+        return response(['message' => 'Accounts deleted']);
+    }
+
 }
