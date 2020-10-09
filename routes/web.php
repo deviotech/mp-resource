@@ -29,6 +29,9 @@ Route::middleware(['auth','verified'])->group(function () {
         Route::get('dashboard', 'UserDashboardController@index')->name('dashboard');
         Route::get('delete-account', 'UserDashboardController@delete')->name('delete.account');
         Route::post('user/update', 'UserDashboardController@update')->name('profile.update');
+
+        Route::get('payment', 'PaymentController@preparePayment')->name('payment');
+        Route::get('payment_success', 'PaymentController@orderSuccess')->name('order.success');
     });
 
     Route::middleware(['isAdmin'])->group(function () {
