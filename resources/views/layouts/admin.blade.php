@@ -334,10 +334,17 @@
                                     <h3 style="color: white;">Newsletter</h3>
                                 </div>
                                 <div class="input-group mb-2 mr-sm-2">
-                                    <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="Email Address">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">Sign In</div>
-                                    </div>
+                                    <form class="form-inline" action="{{route('user.add_to_newsletter')}}" method="post">
+                                        @csrf
+                                        <div class="input-group mb-2 mr-sm-2">
+                                        <input type="text" name="email" class="form-control" id="inlineFormInputGroupUsername2" placeholder="Email Address">
+                                            <div class="input-group-prepend">
+                                                <div class="">
+                                                    <button type="submit" class="btn btn-info mb-1">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div>
                                     <p class="text-white">Zahlungsmöglichkeiten</p>

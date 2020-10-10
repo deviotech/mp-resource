@@ -147,7 +147,7 @@
                                 v-model="
                                   editedItem.product_variations.prices[index]
                                 "
-                                type="number"
+                                type="float"
                                 label="Price"
                               ></v-text-field>
                             </v-col>

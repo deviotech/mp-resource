@@ -300,34 +300,6 @@
 
                 @yield('content')
             </v-main>
-
-            <!-- <v-footer color="primary" padless>
-                <v-row justify="center" no-gutters>
-                    <v-col offset-md="1" cols="3">
-                        <v-img class="mt-2" max-width="162" src="{{ asset('storage/Logo-white-300x134.png') }}"></v-img>
-                        <v-img class="mt-2" max-width="162" src="{{ asset('storage/MPR-Canna-white-200x32.png') }}"></v-img>
-                    </v-col>
-                    <v-col cols="12" md="5">
-                        <v-btn href="{{ route('user.news') }}" color="white" text rounded>
-                            Neuigkeiten</v-btn>
-                        <v-btn href="{{ route('user.shop') }}" color="white" text rounded>
-                            Produkte</v-btn>
-                        <v-btn href="{{ route('user.preorder') }}" color="white" text rounded>
-                            Vorbestellungen</v-btn>
-                        <v-divider></v-divider>
-                        <v-btn href="{{ route('inc.agb') }}" color="white" text rounded>
-                            AGB</v-btn>
-                        <v-btn href="{{ route('inc.dat') }}" color="white" text rounded>
-                            Datenschutzerklaerung</v-btn>
-                        <v-btn href="{{ route('inc.imp') }}" color="white" text rounded>
-                            Impressum</v-btn>
-                    </v-col>
-                    <v-col cols="12" md="3"></v-col>
-                    <v-col class="primary py-4 text-center white--text" cols="12">
-                        <p>Copyright©2019-2020, Medical Pharma Resource GmbH</p>
-                    </v-col>
-                </v-row>
-            </v-footer> -->
             <div class="footer-section">
                 <div class="container">
                     <div class="row">
@@ -357,10 +329,17 @@
                                     <h3 style="color: white;">Newsletter</h3>
                                 </div>
                                 <div class="input-group mb-2 mr-sm-2">
-                                    <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="Email Address">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">Sign In</div>
-                                    </div>
+                                    <form class="form-inline" action="{{route('user.add_to_newsletter')}}" method="post">
+                                        @csrf
+                                        <div class="input-group mb-2 mr-sm-2">
+                                        <input type="text" name="email" class="form-control" id="inlineFormInputGroupUsername2" placeholder="Email Address">
+                                            <div class="input-group-prepend">
+                                                <div class="">
+                                                    <button type="submit" class="btn btn-info mb-1">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div>
                                     <p class="text-white">Zahlungsmöglichkeiten</p>
@@ -387,55 +366,6 @@
                     <p> Copyright © 2019-2020, Medical Pharma Resource GmbH</p>
                 </div>
             </div>
-            <!-- <footer class="footer-section" style="background: #88b04b;">
-                <div class="container">
-                    <div class="footer-cta pt-5 pb-5">
-                        <div class="row">
-                            <div class="footer-content pt-5 pb-5">
-                                <div class="row">
-                                    <div class="col-xl-4 col-lg-4 mb-50">
-                                        <div class="footer-widget">
-                                            <div class="footer-logo">
-                                                <a href="index.html"><img src="https://mp-resource.shop/wp-content/uploads/2019/12/Logo-white-300x134.png" class="img-fluid" alt="logo"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
-                                        <div class="footer-widget">
-                                            <div class="footer-widget-heading">
-                                                <h3>Useful Links</h3>
-                                            </div>
-                                            <ul>
-                                                <li><a href="{{ route('user.news') }}">Neuigkeiten</a></li>
-                                                <li><a href="{{ route('user.shop') }}">Produkte</a></li>
-                                                <li><a href="{{ route('user.preorder') }}">Vorbestellungen</a></li>
-                                                <li><a href="{{ route('inc.agb') }}">AGB</a></li>
-                                                <li><a href="{{ route('inc.dat') }}">Datenschutzerklaerung</a></li>
-                                                <li><a href="{{ route('inc.imp') }}">Impressum</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
-                                        <div class="footer-widget">
-                                            <div class="footer-widget-heading">
-                                                <h3>Newsletter</h3>
-                                            </div>
-                                            <div class="subscribe-form">
-                                                <form action="#">
-                                                    <input type="text" placeholder="Email Address">
-                                                    <button>Sign In</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="footer-widget-heading center">
-                            <h3>Copyright © 2019-2020, Medical Pharma Resource GmbH</h3>
-                        </div>
-            </footer> -->
         </v-app>
     </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
