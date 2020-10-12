@@ -336,10 +336,6 @@ export default {
           (value) =>
             value.length <= 255 || "SKU must be less than 255 characters long",
         ],
-        fileRules: [
-          (v) => !!v || "File is required",
-          (v) => (v && v.length > 0) || "File is required",
-        ],
       },
     };
   },

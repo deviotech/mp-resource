@@ -5,31 +5,30 @@
       <br />
       <h3>Brands</h3>
       <div class="row ml-1 mt-1">
-        <v-btn class="mr-5 mb-5" active-class="aa" @click="reset()"
-          >Reset filter</v-btn
-        >
+        <button class="mr-5 mb-5 filter_button" @click="reset()"
+          >Reset filter</button>
         <div v-for="brand in brands" :key="brand.id">
-          <v-btn class="mr-5 mb-5" @click="filterproduct(brand.value)">{{
+          <button class="mr-5 mb-5 filter_button" @click="filterproduct(brand.value)">{{
             brand.text
-          }}</v-btn>
+          }}</button>
         </div>
       </div>
       <br />
       <h3>Categories</h3>
       <div class="row ml-1 mt-1">
         <div v-for="category in categories" :key="category.id">
-          <v-btn class="mr-5 mb-5" @click="category_filter(category.value)">{{
+          <button class="mr-5 mb-5 filter_button" @click="category_filter(category.value)">{{
             category.text
-          }}</v-btn>
+          }}</button>
         </div>
       </div>
       <br />
       <h3>Variation</h3>
       <div class="row ml-1 mt-1">
         <div v-for="variation in viariations" :key="variation.id">
-          <v-btn class="mr-5 mb-5" @click="variation_filter(variation.value)">{{
+          <button class="mr-5 mb-5 filter_button" @click="variation_filter(variation.value)">{{
             variation.text
-          }}</v-btn>
+          }}</button>
         </div>
       </div>
       <br />
@@ -64,11 +63,9 @@
             <v-img
               class="black--text align-end"
               height="350px"
-              :src="item.image"
-            >
+              :src="item.image">
               <a :href="'/shop/product/' + item.id"
-                ><v-card-title>{{ item.name }}</v-card-title></a
-              >
+                ><v-card-title>{{ item.name }}</v-card-title></a>
             </v-img>
 
             <v-card-actions>
@@ -91,6 +88,13 @@ export default {
     return {
       items: [],
       brands: [],
+      multiselect:[
+        {
+          category_id:null,
+          brand_id:null,       
+          variation_id:null
+        },
+      ],
       categories: [],
       viariations: [],
       sorting_element: "",
@@ -198,6 +202,7 @@ export default {
     },
     filterproduct($value) {
       axios.get(`/back/filterproduct/${$value}`).then((response) => {
+        this.multiselect[0].brand_id= $value;
         this.sortfilterdata[0].brand_id = $value;
         this.items = response.data.data;
         //console.log(this.items);
@@ -205,6 +210,7 @@ export default {
     },
     category_filter($value) {
       axios.get(`/back/category_filter/${$value}`).then((response) => {
+        this.multiselect[0].category_id = $value;
         this.sortfilterdata[0].category_id = $value;
         this.items = response.data.data;
         //console.log(this.items);
@@ -212,6 +218,7 @@ export default {
     },
     variation_filter($value) {
       axios.get(`/back/variation_filter/${$value}`).then((response) => {
+        this.multiselect[0].variation_id= $value;
         this.sortfilterdata[0].variation_id = $value;
         this.items = response.data.data;
         //console.log(this.items);
@@ -238,6 +245,7 @@ export default {
 };
 </script>
 <style>
+
 .card {
   border-radius: 4px;
   background: #fff;
@@ -263,5 +271,25 @@ export default {
 }
 a {
   color: black !important;
+}
+.filter_button {
+      padding: 22px 28px 22px 28px;
+    border: 2px solid #ccc;
+    background: transparent;
+    color: #c1c1c1;
+    min-width: 200px;
+    height: 30px;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-right: 14px;
+    line-height: 0em;
+    text-align: center;
+    font-size: 13px;
+    font-family: ubuntu;
+    font-weight: bold;
+    color: #757575;
+}
+.filter_button:focus{
+  border:5px solid green;
 }
 </style>

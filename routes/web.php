@@ -45,6 +45,8 @@ Route::middleware(['auth','verified'])->group(function () {
             Route::resource('variation-value', 'VariationValueController');
             Route::resource('user', 'UserController');
             Route::resource('order', 'OrderController');
+            Route::get('newsletterindex','NewsletterController@index')->name('newsletterindex');
+            Route::get('newsletter_list','NewsletterController@list')->name('newsletter_list');
             Route::resource('category', 'CategoryController');
         });
 

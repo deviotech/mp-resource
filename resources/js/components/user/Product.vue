@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" sm="6" md="5">
+      <!-- <v-col cols="12" sm="6" md="5">
         <v-carousel hide-delimiters>
           <v-carousel-item
           style=""
@@ -10,7 +10,7 @@
             :src="item.path"
           ></v-carousel-item>
         </v-carousel>
-      </v-col>
+      </v-col> -->
       <v-col cols="12" sm="6" md="7">
         <h2 class="text-h5 mb-3" style="text-transform: uppercase">
           {{ item.name }}

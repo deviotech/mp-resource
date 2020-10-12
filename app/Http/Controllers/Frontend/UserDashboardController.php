@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\PaymentStatus;
 use App\UserOrder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -12,6 +13,7 @@ class UserDashboardController extends Controller
 {
     public function index(){
         $orders = UserOrder::where('user_id', Auth::user()->id)->get();
+        $paymentstatus = PaymentStatus::where('user_id',Auth::user()->id)->get();
         //dd($orders);
         return view('dashboard.index', get_defined_vars());
     }

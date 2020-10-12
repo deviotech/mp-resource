@@ -292,6 +292,8 @@
                                 Users</v-btn>
                             <v-btn href="{{ route('admin.order.index') }}" text class="text--secondary">
                                 Orders</v-btn>
+                                <v-btn href="{{route('admin.newsletterindex')}}" text class="text--secondary">
+                                Newsletter</v-btn>
                             <v-btn href="{{ route('user.shop') }}" text class="text--secondary">
                                 Back to Shop</v-btn>
                             <v-btn @click="logout()" text class="text--secondary">

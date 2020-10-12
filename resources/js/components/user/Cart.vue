@@ -48,18 +48,19 @@
           </tbody>
         </table>
         <div>
-         <p class="row"><v-checkbox
+         <p class="row ml-4"><v-checkbox
             v-model="checkbox_value"
             class="mt-0"
             @change="checking(this.checkbox_value)"
           ></v-checkbox> I accept the  <strong> <a href="#">  Terms and Conditions</a></strong></p>
           <div>
-            <div v-if="this.true_Value">
-              <v-btn
-                @click="makeOrder()"
+            <div class="ml-5" v-if="this.true_Value">
+               <a
                 :disabled="!hasItems"
-                class="btn btn-default float-right mt-2 mb-2"
-                >Pre Order</v-btn>
+                class="btn btn-primary text-white preorder mb-2"
+                href="/payment"
+                >Pre Order</a> 
+                <!-- <a class="btn btn-danger" href="{{route('user.payment')}}">Pay-Out</a> -->
             </div>
           </div>
         </div>
@@ -196,7 +197,7 @@ export default {
           console.log(response.data);
           this.initialize();
           this.$toasted.show(response.data);
-          window.location.href = "/vorbestellungen/my-pre-orders";
+         window.location.href = "/vorbestellungen/my-pre-orders";
         })
         .catch((error) => {
           console.log(error.message);

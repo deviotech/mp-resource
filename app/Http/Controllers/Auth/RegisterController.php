@@ -111,10 +111,17 @@ class RegisterController extends Controller
         sendMail([
             'view' => 'email.user_register',
             'to' => $data['email'],
-            'subject' => 'Welcome to Medical Pharma',
+            'subject' => 'Medical Pharma Resource (MPR) – Onlineshop: Registrierung bestätigen bitte.',
             'from' => 'registrierung@mp-resource.shop',
-            'name' => 'MP Resource Shop',
-            'data' => []
+            'name' => 'Medical Pharma Resource (MPR) – Onlineshop',
+            'data' => [
+                'titles' => $data['titles'],
+                'honorific' => $data['honorific'],
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'username' => $data['username'],
+                'email' => $data['email'],
+            ]
           ]);
 
 

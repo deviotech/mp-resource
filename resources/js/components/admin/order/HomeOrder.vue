@@ -4,8 +4,7 @@
                       :headers="table.headers"
                       :items="table.data"
                       :items-per-page="5"
-                      class="elevation-1"
-        >
+                      class="elevation-1">
             <template v-slot:item.products="{ item }">
                 {{ item.carts.length }}
             </template>

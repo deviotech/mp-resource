@@ -9,7 +9,7 @@ import Profile from "./components/user/profile";
 import Login from './components/auth/Login.vue';
 import Register from './components/auth/Register.vue';
 
-
+import Newsletter from "./components/admin/newsletter/Newsletter.vue";
 import HomeAttribute from "./components/admin/attribute/HomeAttribute";
 import ShowAttribute from "./components/admin/attribute/ShowAttribute";
 
@@ -38,6 +38,7 @@ import Shop from "./components/user/Shop";
 import Product from "./components/user/Product";
 import Cart from "./components/user/Cart";
 import Order from "./components/user/Order";
+import PreOrder from "./components/user/PreOrder";
 import vuetify from "./vuetify";
 
 Vue.component('login', Login);
@@ -47,7 +48,7 @@ Vue.component('home-attribute', HomeAttribute);
 Vue.component('show-attribute', ShowAttribute);
 
 Vue.component('home-brand',HomeBrands);
-
+Vue.component('newsletter',Newsletter);
 Vue.component('home-attribute_value', HomeAttribute_value);
 
 Vue.component('home-category', HomeCategory);
@@ -70,6 +71,7 @@ Vue.component('shop', Shop);
 Vue.component('product', Product);
 Vue.component('cart', Cart);
 Vue.component('order', Order);
+Vue.component('preorder' , PreOrder);
 Vue.component('vue-editor',VueEditor);
 
 Vue.use(VueSanitize);

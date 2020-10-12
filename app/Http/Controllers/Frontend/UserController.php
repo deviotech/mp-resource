@@ -18,7 +18,8 @@ class UserController extends Controller
     }
 
     public function product(Product $product) {
-        return view('user.product')->with('id', $product->id);
+        $product = Product::where('id', $product->id)->first();
+        return view('user.product', get_defined_vars());
     }
 
     public function preorder() {
@@ -34,9 +35,15 @@ class UserController extends Controller
         $request->validate([
             'email'=>'required|email|unique:users,email'
         ]);
-       Newsletter::create([
+         $newsletter =  Newsletter::create([
            'email'=> $request->email
        ]);
+       sendMail([
+        'view' => 'email.initial_newsletter',
+        'to' => $newsletter->email,
+        'subject' => 'Your are Added to Newsletter Subscription',
+        'data' => []
+    ]);
        return redirect()->back();
     }
 }

@@ -15,6 +15,12 @@ use Illuminate\Support\Facades\Auth;
 use DB;
 use phpDocumentor\Reflection\PseudoTypes\False_;
 
+use Mollie\Laravel\Facades\Mollie;
+use Laravel\Cashier\SubscriptionBuilder\RedirectToCheckoutResponse;
+use App\User;
+use App\PaymentStatus;
+use Log;
+
 class ShopController extends Controller
 {
     public function index()
@@ -106,6 +112,7 @@ class ShopController extends Controller
 
     public function makeOrder(Request $request)
     {
+        
         $carts_id = $request->get('carts_id');
 
         $data = [
