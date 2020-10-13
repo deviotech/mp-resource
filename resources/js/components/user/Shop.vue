@@ -2,42 +2,65 @@
   <div>
     <div class="container">
       <h1>Active ingredients</h1>
+      <button class="mr-5 mb-5 filter_button" @click="reset()">
+        Reset filter
+      </button>
       <br />
-      <h3>Brands</h3>
-      <div class="row ml-1 mt-1">
-        <button class="mr-5 mb-5 filter_button" @click="reset()"
-          >Reset filter</button>
-        <div v-for="brand in brands" :key="brand.id">
-          <button class="mr-5 mb-5 filter_button" @click="filterproduct(brand.value)">{{
-            brand.text
-          }}</button>
+      <form>
+        <h3>Brands</h3>
+        <div class="row ml-1 mt-1">
+          <div v-for="brand in brands" :key="brand.value">
+            <!-- <button
+              class="mr-5 mb-5 filter_button"
+              @click="filterproduct(brand.value)"
+            >
+              {{ brand.text }}
+            </button> -->
+            <div class="button-group-pills text-center" data-toggle="buttons">
+              <label class="btn btn-default">
+                <input
+                  type="checkbox"
+                  v-model="multibrand"
+                  :value="brand.value"
+                  @change="multiform()"
+                />
+                <div>{{ brand.text }}</div>
+              </label>
+            </div>
+          </div>
         </div>
-      </div>
-      <br />
-      <h3>Categories</h3>
-      <div class="row ml-1 mt-1">
-        <div v-for="category in categories" :key="category.id">
-          <button class="mr-5 mb-5 filter_button" @click="category_filter(category.value)">{{
-            category.text
-          }}</button>
+        <br />
+        <h3>Categories</h3>
+        <div class="row ml-1 mt-1">
+          <div v-for="category in categories" :key="category.value">
+            <!-- <button
+              class="mr-5 mb-5 filter_button"
+              @click="category_filter(category.value)"
+            >
+              {{ category.text }}
+            </button> -->
+            <div class="button-group-pills text-center" data-toggle="buttons">
+              <label class="btn btn-default">
+                <input
+                  v-model="multicategory"
+                  type="checkbox"
+                  :value="category.value"
+                  @change="multiform()"
+                />
+                <div>{{ category.text }}</div>
+              </label>
+            </div>
+          </div>
         </div>
-      </div>
-      <br />
-      <h3>Variation</h3>
-      <div class="row ml-1 mt-1">
-        <div v-for="variation in viariations" :key="variation.id">
-          <button class="mr-5 mb-5 filter_button" @click="variation_filter(variation.value)">{{
-            variation.text
-          }}</button>
-        </div>
-      </div>
+        <br />
+      </form>
       <br />
       <div class="row">
         <v-col cols="12" sm="3" md="3">
           <v-select
             v-model="filter_passgin_value"
             :items="sorting"
-            @change="sorting_filter()"
+            @change="multiform()"
             name="sorting"
             label="Sort By Standard Sort"
             outlined
@@ -48,7 +71,7 @@
           <v-select
             v-model="view_passing_value"
             :items="view"
-            @change="view_filter()"
+            @change="multiform()"
             name="view"
             label="View Products"
             outlined
@@ -63,9 +86,11 @@
             <v-img
               class="black--text align-end"
               height="350px"
-              :src="item.image">
+              :src="item.image"
+            >
               <a :href="'/shop/product/' + item.id"
-                ><v-card-title>{{ item.name }}</v-card-title></a>
+                ><v-card-title>{{ item.name }}</v-card-title></a
+              >
             </v-img>
 
             <v-card-actions>
@@ -88,13 +113,11 @@ export default {
     return {
       items: [],
       brands: [],
-      multiselect:[
-        {
-          category_id:null,
-          brand_id:null,       
-          variation_id:null
-        },
-      ],
+      ValArray: [],
+
+      multibrand: [],
+      multicategory: [],
+
       categories: [],
       viariations: [],
       sorting_element: "",
@@ -136,16 +159,12 @@ export default {
           value: 3,
         },
         {
-          text: "Sort By Popularity",
+          text: "Sort By Ascending Order",
           value: 4,
         },
         {
-          text: "Sort By Ascending Order",
-          value: 5,
-        },
-        {
           text: "Sort By Descending Order",
-          value: 6,
+          value: 5,
         },
       ],
     };
@@ -202,7 +221,7 @@ export default {
     },
     filterproduct($value) {
       axios.get(`/back/filterproduct/${$value}`).then((response) => {
-        this.multiselect[0].brand_id= $value;
+        this.multiselect[0].brand_id = $value;
         this.sortfilterdata[0].brand_id = $value;
         this.items = response.data.data;
         //console.log(this.items);
@@ -218,7 +237,7 @@ export default {
     },
     variation_filter($value) {
       axios.get(`/back/variation_filter/${$value}`).then((response) => {
-        this.multiselect[0].variation_id= $value;
+        this.multiselect[0].variation_id = $value;
         this.sortfilterdata[0].variation_id = $value;
         this.items = response.data.data;
         //console.log(this.items);
@@ -226,6 +245,10 @@ export default {
     },
     reset() {
       this.initialize();
+    },
+    ischecked(obj) {},
+    trackcheck($labid) {
+      this.ValArray.push($labid);
     },
     sorting_filter() {
       axios
@@ -241,11 +264,97 @@ export default {
           this.items = response.data.data;
         });
     },
+    formData() {
+      return {
+        brand_id: this.multibrand,
+        category_id: this.multicategory,
+        sort_filter: this.filter_passgin_value,
+        view_filter: this.view_passing_value,
+      };
+    },
+    multiform() {
+      axios
+        .post("/back/multiselect", this.formData())
+        .then((response) => {
+          console.log(response.data);
+          this.items = response.data.data;
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    },
   },
 };
 </script>
 <style>
+body {
+  font-family: "Open Sans";
+}
 
+.button-group-pills .btn {
+  padding: 25px 28px 25px 28px;
+  border: 2px solid #ccc;
+  background: transparent;
+  color: #757575;
+  min-width: 200px;
+  height: 30px;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-right: 14px;
+  line-height: 0em;
+  text-align: center;
+  font-size: 15px;
+  font-family: ubuntu;
+  font-weight: bold;
+}
+.button-group-pills .btn.focus {
+  outline-offset: none !important;
+  outline: none;
+  outline-color: none;
+  color: #86af4a;
+}
+.button-group-pills .btn.active {
+  border: 3px solid #86af4a;
+  border-color: 3px solid #86af4a;
+  background-color: transparent;
+  color: #bbbbbb;
+  box-shadow: none;
+}
+.button-group-pills .btn:hover {
+  border-color: #bbbbbb;
+  background-color: transparent;
+  color: black;
+}
+
+.form-group input[type="checkbox"] {
+  display: none;
+}
+
+.form-group input[type="checkbox"] + .btn-group > label span {
+  width: 20px;
+}
+
+.form-group input[type="checkbox"] + .btn-group > label span:first-child {
+  display: none;
+}
+.form-group input[type="checkbox"] + .btn-group > label span:last-child {
+  display: inline-block;
+}
+
+.form-group
+  input[type="checkbox"]:checked
+  + .btn-group
+  > label
+  span:first-child {
+  display: inline-block;
+}
+.form-group
+  input[type="checkbox"]:checked
+  + .btn-group
+  > label
+  span:last-child {
+  display: none;
+}
 .card {
   border-radius: 4px;
   background: #fff;
@@ -273,23 +382,23 @@ a {
   color: black !important;
 }
 .filter_button {
-      padding: 22px 28px 22px 28px;
-    border: 2px solid #ccc;
-    background: transparent;
-    color: #c1c1c1;
-    min-width: 200px;
-    height: 30px;
-    border-radius: 10px;
-    margin-top: 10px;
-    margin-right: 14px;
-    line-height: 0em;
-    text-align: center;
-    font-size: 13px;
-    font-family: ubuntu;
-    font-weight: bold;
-    color: #757575;
+  padding: 22px 28px 22px 28px;
+  border: 2px solid #ccc;
+  background: transparent;
+  color: #c1c1c1;
+  min-width: 200px;
+  height: 30px;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-right: 14px;
+  line-height: 0em;
+  text-align: center;
+  font-size: 13px;
+  font-family: ubuntu;
+  font-weight: bold;
+  color: #757575;
 }
-.filter_button:focus{
-  border:5px solid green;
+.filter_button:focus {
+  border: 5px solid green;
 }
 </style>
