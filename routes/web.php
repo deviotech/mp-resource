@@ -47,6 +47,7 @@ Route::middleware(['auth','verified'])->group(function () {
             Route::resource('order', 'OrderController');
             Route::get('newsletterindex','NewsletterController@index')->name('newsletterindex');
             Route::get('newsletter_list','NewsletterController@list')->name('newsletter_list');
+            Route::post('SendNewsletterEmail','NewsletterController@SendNewsletterEmail')->name('SendNewsletterEmail');
             Route::resource('category', 'CategoryController');
 
             Route::get('call-service', 'CallServiceController@index')->name('call-service');
@@ -78,6 +79,7 @@ Route::middleware(['auth','verified'])->group(function () {
             Route::delete('products-delete/{id}','ProductController@destroy')->name('products-delete');
             Route::post('users/{user}/activate', 'UserController@activate');
             Route::post('users/{user}/deactivate', 'UserController@deactivate');
+            Route::post('multiselect','FilterController@multiselect')->name('multiselect');
         });
     });
 

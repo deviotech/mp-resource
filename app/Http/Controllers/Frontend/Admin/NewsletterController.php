@@ -17,4 +17,20 @@ class NewsletterController extends Controller
         $newsletter = Newsletter::all();
         return response(['data' => $newsletter]);
     }
+    public function SendNewsletterEmail(Request $request)
+    {
+        //dd($request->all());
+        foreach($request->EmailList as $list)
+        {
+            sendMail([
+                'view' => 'email.NewsletterEmailFromAdmin',
+                'to' => $list,
+                'subject' => $request->Subject,
+                'data' => [
+                    'description' => $request->Description,
+                ]
+            ]);
+        }
+        return response(['data' => "The Newsletter Is Send To Customer"]);
+    }
 }
