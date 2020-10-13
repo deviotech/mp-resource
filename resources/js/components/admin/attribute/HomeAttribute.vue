@@ -1,11 +1,11 @@
 <template>
   <v-container>
     <v-data-table
-      show-select
-      :headers="table.headers"
-      :items="table.data"
-      :items-per-page="5"
-      class="elevation-1"
+        show-select
+        :headers="table.headers"
+        :items="table.data"
+        :items-per-page="5"
+        class="elevation-1"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
@@ -15,7 +15,7 @@
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
-                >Create Attribute
+              >Create Attribute
               </v-btn>
             </template>
             <v-card>
@@ -29,19 +29,19 @@
                     <v-row>
                       <v-col cols="12">
                         <v-text-field
-                          :error="errors.name"
-                          :error-messages="errors.name"
-                          :rules="rules"
-                          :counter="255"
-                          v-model="editedItem.name"
-                          label="Attribute name"
+                            :error="errors.name"
+                            :error-messages="errors.name"
+                            :rules="rules"
+                            :counter="255"
+                            v-model="editedItem.name"
+                            label="Attribute name"
                         ></v-text-field>
                       </v-col>
 
                       <v-col cols="12">
                         <v-textarea
-                          v-model="editedItem.description"
-                          label="Description"
+                            v-model="editedItem.description"
+                            label="Description"
                         ></v-textarea>
                       </v-col>
 
@@ -69,10 +69,10 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-btn small class="mr-2" :href="'attribute/' + item.id" icon>
-          <v-icon small>mdi-magnify </v-icon>
+          <v-icon small>mdi-magnify</v-icon>
         </v-btn>
-        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil</v-icon>
+        <v-icon small @click="deleteItem(item)"> mdi-delete</v-icon>
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -128,7 +128,7 @@ export default {
       rules: [
         (value) => !!value || "Name field is required",
         (value) =>
-          value.length <= 255 || "Name must be less than 255 characters long",
+            value.length <= 255 || "Name must be less than 255 characters long",
       ],
     };
   },
@@ -152,13 +152,13 @@ export default {
   methods: {
     initialize() {
       axios
-        .get("/back/attributes")
-        .then((response) => {
-          this.table.data = response.data.data;
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+          .get("/back/attributes")
+          .then((response) => {
+            this.table.data = response.data.data;
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
     },
 
     editItem(item) {
@@ -170,9 +170,9 @@ export default {
     deleteItem(item) {
       const index = this.table.data.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
-        axios.delete("/back/attributes/" + item.id).then((respones) => {
-          this.initialize();
-        });
+      axios.delete("/back/attributes/" + item.id).then((respones) => {
+        this.initialize();
+      });
     },
 
     close() {
@@ -187,25 +187,25 @@ export default {
       if (this.$refs.modal.validate()) {
         if (this.editedIndex > -1) {
           axios
-            .patch("/back/attributes/" + this.editedItem.id, this.editedItem)
-            .then((response) => {
-              this.initialize();
-              this.close();
-            })
-            .catch((error) => {
-              this.errors = error.response.data;
-            });
+              .patch("/back/attributes/" + this.editedItem.id, this.editedItem)
+              .then((response) => {
+                this.initialize();
+                this.close();
+              })
+              .catch((error) => {
+                this.errors = error.response.data;
+              });
         } else {
           axios
-            .post("/back/attributes", this.editedItem)
-            .then((response) => {
-              this.initialize();
-              this.close();
-              this.$toasted.show(response.data)
-            })
-            .catch((error) => {
-              this.errors = error.response.data;
-            });
+              .post("/back/attributes", this.editedItem)
+              .then((response) => {
+                this.initialize();
+                this.close();
+                this.$toasted.show(response.data)
+              })
+              .catch((error) => {
+                this.errors = error.response.data;
+              });
         }
       }
     },

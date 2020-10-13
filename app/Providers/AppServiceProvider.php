@@ -24,6 +24,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Schema::defaultStringLength('190');
+        //Schema::defaultStringLength('190'); Change your db collation to utf8mb4_unicode_ci
     }
 }

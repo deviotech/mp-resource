@@ -47,7 +47,7 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -66,7 +66,7 @@ class RegisterController extends Controller
                     'Prof.', 'Prof. Dr.', 'Prof. Dr. h. c.', 'Prof. Dr. mult.', 'Prof. Dr. med.',
                     'Prof. Dr. Dr.', 'Prof. Dr. Dr. h. c.', 'Prof. Dr. Dr. h. c. mult.',
                     'Prof. Dr. Dr. med.',
-                    ])
+                ])
             ],
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
@@ -89,7 +89,7 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
-         $user = User::create([
+        $user = User::create([
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -122,7 +122,7 @@ class RegisterController extends Controller
                 'username' => $data['username'],
                 'email' => $data['email'],
             ]
-          ]);
+        ]);
 
 
         $user->addMedia($data['file1']->path())
@@ -138,7 +138,8 @@ class RegisterController extends Controller
         return $user;
     }
 
-    public function checkIfExists(Request $request) {
+    public function checkIfExists(Request $request)
+    {
         $email = $request->get('email', null);
         $username = $request->get('username', null);
 
@@ -149,7 +150,7 @@ class RegisterController extends Controller
         }
 
         if ($email) {
-            if(optional(User::where('email', $email)->first())->exists()) {
+            if (optional(User::where('email', $email)->first())->exists()) {
                 return response(['value' => true]);
             }
         }

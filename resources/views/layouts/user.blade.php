@@ -17,41 +17,50 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <!-- Styles -->
     <link rel='stylesheet' href='https://k1ngzed.com/dist/swiper/swiper.min.css'>
     <link rel='stylesheet' href='https://k1ngzed.com/dist/EasyZoom/easyzoom.css'>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        #thumbs { padding-top: 10px; overflow: hidden; }
-#thumbs img, #largeImage {
-   width: 100%;
-   background-color: white;
-   cursor: pointer;
-}
-#thumbs img {
-   float: left;
-   overflow: scroll;
-   margin-right: 6px;
-   width: 100px;
-   max-height: 100px;
-}
-#description {
-   background: black;
-   color: white;
-   position: absolute;
-   bottom: 0;
-   padding: 10px 20px;
-   width: 525px;
-   margin: 5px;
-}
-#panel {
-    position: relative;
-}
+        #thumbs {
+            padding-top: 10px;
+            overflow: hidden;
+        }
+
+        #thumbs img, #largeImage {
+            width: 100%;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        #thumbs img {
+            float: left;
+            overflow: scroll;
+            margin-right: 6px;
+            width: 100px;
+            max-height: 100px;
+        }
+
+        #description {
+            background: black;
+            color: white;
+            position: absolute;
+            bottom: 0;
+            padding: 10px 20px;
+            width: 525px;
+            margin: 5px;
+        }
+
+        #panel {
+            position: relative;
+        }
+
         ul {
             margin: 0px;
             padding: 0px;
@@ -292,124 +301,144 @@
 </head>
 
 <body>
-    <div id="app">
-        <v-app v-cloak {{--style="background-image: linear-gradient(180deg, rgba(255,255,255,0) 0%, #dfeacc 100%);"--}}>
-            <v-app-bar app height="100" flat color="#fff">
-                <v-container>
-                    <v-row align="center" justify="center">
-                        <a href="/">
-                            <v-img max-width="162" src="https://mp-resource.shop/wp-content/uploads/2019/12/Logo-Original.png" contain></v-img>
-                        </a>
-                        <v-spacer></v-spacer>
-                        <v-btn href="{{ route('user.news') }}" text class="text--secondary {{ (request()->is('neuigkeiten')) ? 'active' : '' }}">
-                            Neuigkeiten</v-btn>
-                        <v-btn href="{{ route('user.shop') }}" text class="text--secondary {{ (strpos(Route::currentRouteName(), 'user.shop') == 0) ? 'active' : '' }}">
-                            Produkte</v-btn>
-                        <v-btn href="{{ route('user.preorder') }}" text class="text--secondary">
-                            Vorbestellungen</v-btn>
-                        <v-btn href="{{ route('user.cart') }}" text class="text--secondary">
-                            <v-icon>mdi-cart</v-icon>
-                            <v-chip class="ma-2" pill id="cart-count">
-                                {{ Auth::user()->inCart()->count() }}
-                            </v-chip>
-                        </v-btn>
-                        @if(Auth::user()->is_admin)
+<div id="app">
+    <v-app v-cloak {{--style="background-image: linear-gradient(180deg, rgba(255,255,255,0) 0%, #dfeacc 100%);"--}}>
+        <v-app-bar app height="100" flat color="#fff">
+            <v-container>
+                <v-row align="center" justify="center">
+                    <a href="/">
+                        <v-img max-width="162"
+                               src="https://mp-resource.shop/wp-content/uploads/2019/12/Logo-Original.png"
+                               contain></v-img>
+                    </a>
+                    <v-spacer></v-spacer>
+                    <v-btn href="{{ route('user.news') }}" text
+                           class="text--secondary {{ (request()->is('neuigkeiten')) ? 'active' : '' }}">
+                        Neuigkeiten
+                    </v-btn>
+                    <v-btn href="{{ route('user.shop') }}" text
+                           class="text--secondary {{ (strpos(Route::currentRouteName(), 'user.shop') == 0) ? 'active' : '' }}">
+                        Produkte
+                    </v-btn>
+                    <v-btn href="{{ route('user.preorder') }}" text class="text--secondary">
+                        Vorbestellungen
+                    </v-btn>
+                    <v-btn href="{{ route('user.cart') }}" text class="text--secondary">
+                        <v-icon>mdi-cart</v-icon>
+                        <v-chip class="ma-2" pill id="cart-count">
+                            {{ Auth::user()->inCart()->count() }}
+                        </v-chip>
+                    </v-btn>
+                    @if(Auth::user()->is_admin)
                         <v-btn href="/admin/product" text class="text--secondary">
-                            Admin</v-btn>
-                        @endif
-                        <v-btn href="{{ route('user.dashboard') }}" text class="text--secondary">
-                            My Account</v-btn>
-                        <v-btn @click="logout()" text class="text--secondary">
-                            Logout</v-btn>
-                    </v-row>
-                </v-container>
+                            Admin
+                        </v-btn>
+                    @endif
+                    <v-btn href="{{ route('user.dashboard') }}" text class="text--secondary">
+                        My Account
+                    </v-btn>
+                    <v-btn @click="logout()" text class="text--secondary">
+                        Logout
+                    </v-btn>
+                </v-row>
+            </v-container>
 
-            </v-app-bar>
+        </v-app-bar>
 
-            <v-main>
+        <v-main>
 
-                @yield('content')
-            </v-main>
-            <div class="footer-section">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-3 first mt-2">
-                            <a href="/">
-                                <v-img max-width="182" src="/Logo-white-300x134.png" contain></v-img>
-                                <v-img max-width="160" class="mt-2 ml-2" src="/MPR-Canna-white-200x32.png" contain></v-img>
+            @yield('content')
+        </v-main>
+        <div class="footer-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 first mt-2">
+                        <a href="/">
+                            <v-img max-width="182" src="/Logo-white-300x134.png" contain></v-img>
+                            <v-img max-width="160" class="mt-2 ml-2" src="/MPR-Canna-white-200x32.png" contain></v-img>
 
-                            </a> </div>
-                        <div class="col-md-3 ">
-                            <ul>
-                                <li><a href="{{ route('user.news') }}">Neuigkeiten</a></li>
-                                <li><a href="{{ route('user.shop') }}">Produkte</a></li>
-                                <li><a href="{{ route('user.preorder') }}">Vorbestellungen</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-3">
-                            <ul>
-                                <li><a href="{{ route('inc.agb') }}">AGB</a></li>
-                                <li><a href="{{ route('inc.dat') }}">Datenschutzerklaerung</a></li>
-                                <li><a href="{{ route('inc.imp') }}">Impressum</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-3" style="border-left: 1px solid white; padding: 10px">
+                        </a></div>
+                    <div class="col-md-3 ">
+                        <ul>
+                            <li><a href="{{ route('user.news') }}">Neuigkeiten</a></li>
+                            <li><a href="{{ route('user.shop') }}">Produkte</a></li>
+                            <li><a href="{{ route('user.preorder') }}">Vorbestellungen</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <ul>
+                            <li><a href="{{ route('inc.agb') }}">AGB</a></li>
+                            <li><a href="{{ route('inc.dat') }}">Datenschutzerklaerung</a></li>
+                            <li><a href="{{ route('inc.imp') }}">Impressum</a></li>
+                            <li>
+                                <call-service></call-service>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3" style="border-left: 1px solid white; padding: 10px">
+                        <div class="">
                             <div class="">
-                                <div class="">
-                                    <h3 style="color: white;">Newsletter</h3>
-                                </div>
-                                <div class="input-group mb-2 mr-sm-2">
-                                    <form class="form-inline" action="{{route('user.add_to_newsletter')}}" method="post">
-                                        @csrf
-                                        <div class="input-group mb-2 mr-sm-2">
-                                        <input type="text" name="email" class="form-control" id="inlineFormInputGroupUsername2" placeholder="Email Address">
-                                            <div class="input-group-prepend">
-                                                <div class="">
-                                                    <button type="submit" class="btn btn-info mb-1">Submit</button>
-                                                </div>
+                                <h3 style="color: white;">Newsletter</h3>
+                            </div>
+                            <div class="input-group mb-2 mr-sm-2">
+                                <form class="form-inline" action="{{route('user.add_to_newsletter')}}" method="post">
+                                    @csrf
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <input type="text" name="email" class="form-control"
+                                               id="inlineFormInputGroupUsername2" placeholder="Email Address">
+                                        <div class="input-group-prepend">
+                                            <div class="">
+                                                <button type="submit" class="btn btn-info mb-1">Submit</button>
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
-                                <div>
-                                    <p class="text-white">Zahlungsmöglichkeiten</p>
-                                    <div class="row ml-2">
-                                        <div class="ml-2 mr-2">
-                                            <a href="#" class="">
-                                                <img src="https://mp-resource.shop/wp-content/uploads/2019/12/SEPA-rund.png" class="" alt="">
-                                            </a>
-                                        </div>
-                                        <div class="ml-2 mr-2">
-                                            <a href="#" class="">
-                                                <img src="https://mp-resource.shop/wp-content/uploads/2019/12/Vorkasse-rund.png" class="" alt="">
-                                            </a>
-                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div>
+                                <p class="text-white">Zahlungsmöglichkeiten</p>
+                                <div class="row ml-2">
+                                    <div class="ml-2 mr-2">
+                                        <a href="#" class="">
+                                            <img src="https://mp-resource.shop/wp-content/uploads/2019/12/SEPA-rund.png"
+                                                 class="" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="ml-2 mr-2">
+                                        <a href="#" class="">
+                                            <img src="https://mp-resource.shop/wp-content/uploads/2019/12/Vorkasse-rund.png"
+                                                 class="" alt="">
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <hr>
-
-                <div class="text-center m-auto text-white">
-                    <p> Copyright © 2019-2020, Medical Pharma Resource GmbH</p>
-                </div>
             </div>
-        </v-app>
-    </div>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    <script src='https://code.jquery.com/jquery-3.4.1.min.js'></script>
-    
-    <script>
-        $(document).ready(function () {
-            $('#thumbs img').click(function(){
-            $('#largeImage').attr('src',$(this).attr('src').replace('thumb','large'));
+            <hr>
+
+            <div class="text-center m-auto text-white">
+                <p> Copyright © 2019-2020, Medical Pharma Resource GmbH</p>
+            </div>
+        </div>
+    </v-app>
+</div>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+<script src='https://code.jquery.com/jquery-3.4.1.min.js'></script>
+
+<script>
+    $(document).ready(function () {
+        $('#thumbs img').click(function () {
+            $('#largeImage').attr('src', $(this).attr('src').replace('thumb', 'large'));
             $('#description').html($(this).attr('alt'));
-});
         });
-    </script>
+    });
+</script>
 </body>
 
 </html>

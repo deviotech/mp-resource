@@ -2,20 +2,20 @@
   <div class="container">
     <table class="table">
       <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Email</th>
-          <th scope="col">Action</th>
-        </tr>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Email</th>
+        <th scope="col">Action</th>
+      </tr>
       </thead>
       <tbody>
-        <tr v-for="list in lists" :key="list.id">
-          <th scope="row">{{ list.id }}</th>
-          <td>{{ list.email }}</td>
-          <td>
-            <v-btn class="btn btn-info">Send Email</v-btn>
-          </td>
-        </tr>
+      <tr v-for="list in lists" :key="list.id">
+        <th scope="row">{{ list.id }}</th>
+        <td>{{ list.email }}</td>
+        <td>
+          <v-btn class="btn btn-info">Send Email</v-btn>
+        </td>
+      </tr>
       </tbody>
     </table>
     <form>
@@ -32,10 +32,10 @@
       <div class="form-group">
         <label for="exampleFormControlInput1">Subject</label>
         <input
-          type="text"
-          class="form-control"
-          id="exampleFormControlInput1"
-          placeholder="name@example.com"
+            type="text"
+            class="form-control"
+            id="exampleFormControlInput1"
+            placeholder="name@example.com"
         />
       </div>
 
@@ -60,13 +60,13 @@ export default {
   methods: {
     initialize() {
       axios
-        .get("/admin/newsletter_list")
-        .then((response) => {
-          this.lists = response.data.data;
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+          .get("/admin/newsletter_list")
+          .then((response) => {
+            this.lists = response.data.data;
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
     },
   },
 };

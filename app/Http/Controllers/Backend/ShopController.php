@@ -152,7 +152,7 @@ class ShopController extends Controller
 
     public function getOrders()
     {
-        return response(['data' => Auth::user()->userorders->load(['carts'])->toArray()]);
+        return response(['data' => Auth::user()->userOrders->load(['carts'])->toArray()]);
     }
     public function getcount()
     {
