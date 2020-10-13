@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Mail\UserRegister;
+use App\Mail\UserRegisterAdmin;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -118,10 +119,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
         ];
 
-        $adminEmails = User::where('is_admin', 1)->pluck('email')->toArray();
-
-        Mail::to($data['email'])->bcc($adminEmails)->send(new UserRegister($data));
-
+        Mail::to($data['email'])->send(new UserRegister($data));
 
         $user->addMedia($data['file1']->path())
             ->setFileName($data['file1']->getClientOriginalName())
@@ -132,6 +130,12 @@ class RegisterController extends Controller
         $user->addMedia($data['file3']->path())
             ->setFileName($data['file3']->getClientOriginalName())
             ->toMediaCollection('upload_files');
+
+
+        $adminEmails = User::where('is_admin', 1)->pluck('email')->toArray();
+
+        Mail::to($adminEmails)->send(new UserRegisterAdmin($user));
+
 
         return $user;
     }
