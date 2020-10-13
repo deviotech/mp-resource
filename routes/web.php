@@ -105,3 +105,7 @@ Route::middleware(['auth','verified'])->group(function () {
         Route::get('user/payments', 'UserController@userPaymentStatus');
     });
 });
+
+Route::get('email/active', function () {
+    return view('email.user_active');
+});

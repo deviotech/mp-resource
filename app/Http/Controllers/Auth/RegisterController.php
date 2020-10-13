@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\UserRegister;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -108,21 +109,18 @@ class RegisterController extends Controller
             'subscribed' => $data['subscribe'] ? 1 : 0,
         ]);
 
-        sendMail([
-            'view' => 'email.user_register',
-            'to' => $data['email'],
-            'subject' => 'Medical Pharma Resource (MPR) – Onlineshop: Registrierung bestätigen bitte.',
-            'from' => 'registrierung@mp-resource.shop',
-            'name' => 'Medical Pharma Resource (MPR) – Onlineshop',
-            'data' => [
-                'titles' => $data['titles'],
-                'honorific' => $data['honorific'],
-                'first_name' => $data['first_name'],
-                'last_name' => $data['last_name'],
-                'username' => $data['username'],
-                'email' => $data['email'],
-            ]
-        ]);
+        $data = [
+            'titles' => $data['titles'],
+            'honorific' => $data['honorific'],
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'username' => $data['username'],
+            'email' => $data['email'],
+        ];
+
+        $adminEmails = User::where('is_admin', 1)->pluck('email')->toArray();
+
+        Mail::to($data['email'])->bcc($adminEmails)->send(new UserRegister($data));
 
 
         $user->addMedia($data['file1']->path())
