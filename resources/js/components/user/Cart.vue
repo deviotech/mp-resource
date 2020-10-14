@@ -4,21 +4,23 @@
       <v-container>
         <h2 class="mb-3">You Have {{ items.length }} Items In Your Cart</h2>
         <v-data-table
-          :headers="headers"
-          :items="items"
-          :items-per-page="15"
-          class="elevation-1"
+            :headers="headers"
+            :items="items"
+            :items-per-page="15"
+            class="elevation-1"
         >
           <template v-slot:item.price="{ item }"
-            >{{ item.price }} €</template
+          >{{ item.price }} €
+          </template
           >
           <template v-slot:item.total="{ item }"
-            >{{ item.quantity * item.price }} €</template
+          >{{ item.quantity * item.price }} €
+          </template
           >
           <template v-slot:item.actions="{ item }">
-            <v-icon small @click="removeItem(item)"> mdi-delete </v-icon>
+            <v-icon small @click="removeItem(item)"> mdi-delete</v-icon>
           </template>
-          <template v-slot:no-data> Cart is empty </template>
+          <template v-slot:no-data> Cart is empty</template>
           <template v-slot:footer>
             <v-row align="center" justify="center" class="text-center">
               <!-- <v-col cols="12" md="6" order="2" order-md="1">
@@ -38,35 +40,37 @@
       <div class="col-md-8"></div>
       <div class="col-md-4">
         <h1>Shopping cart total</h1>
-        <hr />
+        <hr/>
         <table class="table table-borderless" style="border-spacing: 10px">
           <tbody>
-            <tr>
-              <th>{{ this.headers[4].text }}</th>
-              <td>{{ this.totalPrice }}€</td>
-            </tr>
+          <tr>
+            <th>{{ this.headers[4].text }}</th>
+            <td>{{ this.totalPrice }}€</td>
+          </tr>
           </tbody>
         </table>
         <div>
-         <p class="row ml-4"><v-checkbox
-            v-model="checkbox_value"
-            class="mt-0"
-            @change="checking(this.checkbox_value)"
-          ></v-checkbox> I accept the  <strong> <a href="#">  Terms and Conditions</a></strong></p>
+          <p class="row ml-4">
+            <v-checkbox
+                v-model="checkbox_value"
+                class="mt-0"
+                @change="checking(this.checkbox_value)"
+            ></v-checkbox>
+            I accept the <strong> <a href="#"> Terms and Conditions</a></strong></p>
           <div>
             <div class="ml-5" v-if="this.true_Value">
-               <a
-                :disabled="!hasItems"
-                class="btn btn-primary text-white preorder mb-2"
-                href="/payment"
-                >Pre Order</a> 
-                <!-- <a class="btn btn-danger" href="{{route('user.payment')}}">Pay-Out</a> -->
+              <a
+                  :disabled="!hasItems"
+                  class="btn btn-primary text-white preorder mb-2"
+                  href="/payment"
+              >Pre Order</a>
+              <!-- <a class="btn btn-danger" href="{{route('user.payment')}}">Pay-Out</a> -->
             </div>
           </div>
         </div>
       </div>
     </div>
-    <br />
+    <br/>
   </div>
 </template>
 
@@ -154,54 +158,54 @@ export default {
   methods: {
     initialize() {
       axios
-        .get("/back/in-cart")
-        .then((response) => {
-          this.items = response.data.data;
-          this.product_detail = response.data.data.map((item) => {
-            return (item = {
-              quantity: item.quantity,
+          .get("/back/in-cart")
+          .then((response) => {
+            this.items = response.data.data;
+            this.product_detail = response.data.data.map((item) => {
+              return (item = {
+                quantity: item.quantity,
+              });
             });
+          })
+          .catch((error) => {
+            console.log(error.message);
           });
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
     },
 
     removeItem(item) {
       axios
-        .delete("/back/remove-from-cart/" + item.id)
-        .then((response) => {
-          this.initialize();
-          this.count = response.data;
-          document.getElementById("cart-count").innerHTML = this.count;
-          this.initialize();
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+          .delete("/back/remove-from-cart/" + item.id)
+          .then((response) => {
+            this.initialize();
+            this.count = response.data;
+            document.getElementById("cart-count").innerHTML = this.count;
+            this.initialize();
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
     },
 
     formData() {
       return {
         carts_id: this.cartIds,
         total_price: this.totalPrice,
-       // product_id: this.product_detail,
+        // product_id: this.product_detail,
       };
     },
 
     makeOrder() {
       axios
-        .post("/back/make-order", this.formData())
-        .then((response) => {
-          console.log(response.data);
-          this.initialize();
-          this.$toasted.show(response.data);
-         window.location.href = "/vorbestellungen/my-pre-orders";
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+          .post("/back/make-order", this.formData())
+          .then((response) => {
+            console.log(response.data);
+            this.initialize();
+            this.$toasted.show(response.data);
+            window.location.href = "/vorbestellungen/my-pre-orders";
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
     },
   },
 };

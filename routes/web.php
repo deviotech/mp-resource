@@ -49,6 +49,9 @@ Route::middleware(['auth','verified'])->group(function () {
             Route::get('newsletter_list','NewsletterController@list')->name('newsletter_list');
             Route::post('SendNewsletterEmail','NewsletterController@SendNewsletterEmail')->name('SendNewsletterEmail');
             Route::resource('category', 'CategoryController');
+
+            Route::get('call-service', 'CallServiceController@index')->name('call-service');
+
         });
 
         Route::namespace('Backend')->prefix('back')->name('back.')->group(function () {
@@ -61,6 +64,10 @@ Route::middleware(['auth','verified'])->group(function () {
             Route::resource('products', 'ProductController');
             Route::resource('brands','BrandController');
             Route::resource('orders', 'OrderController');
+
+            route::get('call-service', 'CallServiceController@index');
+            route::post('call-service', 'CallServiceController@store');
+
             Route::post('update-products/{id?}', 'ProductController@update')->name('update.product');
             Route::delete('products-delete/{id}','ProductController@destroy')->name('products-delete');
             Route::post('users/{user}/activate', 'UserController@activate');
@@ -93,5 +100,12 @@ Route::middleware(['auth','verified'])->group(function () {
         Route::delete('remove-from-cart/{cart}', 'ShopController@removeFromCart');
         Route::post('make-order', 'ShopController@makeOrder');
         Route::get('get-orders', 'ShopController@getOrders');
+
+        Route::get('user/orders', 'UserController@userOrders');
+        Route::get('user/payments', 'UserController@userPaymentStatus');
     });
+});
+
+Route::get('email/active', function () {
+    return view('email.user_active');
 });

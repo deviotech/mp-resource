@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\UserActivate;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -65,15 +68,7 @@ class UserController extends Controller
 
         $user->save();
 
-        sendMail([
-            'view' => 'email.user_active',
-            'to' => $user->email,
-            'subject' => 'Your Account has Been Activated',
-            'from' => 'verifizierung@mp-resource.shop',
-            'name' => 'MP Resource Shop',
-            'data' => []
-          ]);
-
+        Mail::to($user->email)->send(new UserActivate());
 
         return response(['data' => $user, 'message' => 'Account enabled']);
     }
@@ -105,4 +100,15 @@ class UserController extends Controller
         return response(['message' => 'Accounts deleted']);
     }
 
+    public function userOrders() {
+        $orders = Auth::user()->userOrders->all();
+
+        return response(['data' => $orders]);
+    }
+
+    public function userPaymentStatus() {
+        $paymentStatus = Auth::user()->paymentStatus->all();
+
+        return response(['data' => $paymentStatus]);
+    }
 }

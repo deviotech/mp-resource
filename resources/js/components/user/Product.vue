@@ -16,7 +16,7 @@
           {{ item.name }}
         </h2>
         <hr
-          style="
+            style="
             background: #efefef;
             color: rgba(68, 68, 68, 1);
             height: 1px;
@@ -34,30 +34,32 @@
             <p>Variation Value Name</p>
             <v-btn-toggle v-model="selected" rounded>
               <template v-for="value in item.variationValues">
-                 <!-- Price:<strong class=""
-                    >{{ value.pivot.price }}€</strong> -->
+                <!-- Price:<strong class=""
+                   >{{ value.pivot.price }}€</strong> -->
                 <v-btn :value="value.variation_id">
-                  {{ value.name }} 
+                  {{ value.name }}
                 </v-btn>
-               
+
               </template>
             </v-btn-toggle>
-           <div class="row mt-3">
+            <div class="row mt-3">
               <p>Price for variations</p>
-            <div  v-for="value in item.variations">,
-              <strong>{{value.pivot.price}}</strong>
+              <div v-for="value in item.variations">,
+                <strong>{{ value.pivot.price }}</strong>
+              </div>
             </div>
-           </div>
 
           </v-col>
 
           <v-col cols="12" md="3">
             <v-text-field v-model="quantity" label="Quantity" solo flat>
               <v-icon @click="addProduct()" slot="append" color="red"
-                >mdi-plus</v-icon
+              >mdi-plus
+              </v-icon
               >
               <v-icon @click="subProduct()" slot="prepend" color="green"
-                >mdi-minus</v-icon
+              >mdi-minus
+              </v-icon
               >
             </v-text-field>
           </v-col>
@@ -77,21 +79,23 @@
           <div class="text-center">
             Arzneibroschüre
             <v-btn
-              :href="item.brochure"
-              target="_blank"
-              class="ma-2"
-              outlined
-              color="primary"
-              >Download</v-btn
+                :href="item.brochure"
+                target="_blank"
+                class="ma-2"
+                outlined
+                color="primary"
+            >Download
+            </v-btn
             >
             Chargenanalyse
             <v-btn
-              :href="item.analysis"
-              target="_blank"
-              class="ma-2"
-              outlined
-              color="primary"
-              >Download</v-btn
+                :href="item.analysis"
+                target="_blank"
+                class="ma-2"
+                outlined
+                color="primary"
+            >Download
+            </v-btn
             >
           </div>
         </template>
@@ -119,7 +123,7 @@ export default {
 
   computed: {
     canAddToCart() {
-     // return this.selected && this.quantity < this.item.stock_quantity;
+      // return this.selected && this.quantity < this.item.stock_quantity;
     },
   },
 
@@ -150,13 +154,13 @@ export default {
 
     initialize() {
       axios
-        .get("/back/shop/" + this.item_id)
-        .then((response) => {
-          this.item = response.data;
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+          .get("/back/shop/" + this.item_id)
+          .then((response) => {
+            this.item = response.data;
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
     },
     formData() {
       return {

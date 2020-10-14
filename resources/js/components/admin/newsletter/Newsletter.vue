@@ -13,11 +13,10 @@
       <div class="form-group col-md-12">
         <label for="exampleFormControlInput1">Subject</label>
         <input
-          type="text"
-          v-model="subject"
-          class="form-control"
-          id="exampleFormControlInput1"
-          placeholder="Subject"
+            type="text"
+            v-model="subject"class="form-control"
+            id="exampleFormControlInput1"
+            placeholder="Subject"
         />
       </div>
       <v-col cols="12">

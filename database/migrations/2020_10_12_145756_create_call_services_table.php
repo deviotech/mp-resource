@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductVariationTable extends Migration
+class CreateCallServicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateProductVariationTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_variation', function (Blueprint $table) {
+        Schema::create('call_services', function (Blueprint $table) {
             $table->id();
-            $table->integer('variation_id')->unsigned();
-            $table->integer('product_id')->unsigned();
-            $table->integer('stock_quantity');
+            $table->string('name');
+            $table->string('telephone');
+            $table->string('email');
+            $table->string('recall');
+            $table->text('message');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateProductVariationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_variations');
+        Schema::dropIfExists('call_services');
     }
 }

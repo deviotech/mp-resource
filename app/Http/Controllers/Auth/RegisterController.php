@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\UserRegister;
+use App\Mail\UserRegisterAdmin;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -47,7 +49,7 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -66,7 +68,7 @@ class RegisterController extends Controller
                     'Prof.', 'Prof. Dr.', 'Prof. Dr. h. c.', 'Prof. Dr. mult.', 'Prof. Dr. med.',
                     'Prof. Dr. Dr.', 'Prof. Dr. Dr. h. c.', 'Prof. Dr. Dr. h. c. mult.',
                     'Prof. Dr. Dr. med.',
-                    ])
+                ])
             ],
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
@@ -89,7 +91,7 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
-         $user = User::create([
+        $user = User::create([
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -108,22 +110,16 @@ class RegisterController extends Controller
             'subscribed' => $data['subscribe'] ? 1 : 0,
         ]);
 
-        sendMail([
-            'view' => 'email.user_register',
-            'to' => $data['email'],
-            'subject' => 'Medical Pharma Resource (MPR) – Onlineshop: Registrierung bestätigen bitte.',
-            'from' => 'registrierung@mp-resource.shop',
-            'name' => 'Medical Pharma Resource (MPR) – Onlineshop',
-            'data' => [
-                'titles' => $data['titles'],
-                'honorific' => $data['honorific'],
-                'first_name' => $data['first_name'],
-                'last_name' => $data['last_name'],
-                'username' => $data['username'],
-                'email' => $data['email'],
-            ]
-          ]);
+        $data = [
+            'titles' => $data['titles'],
+            'honorific' => $data['honorific'],
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'username' => $data['username'],
+            'email' => $data['email'],
+        ];
 
+        Mail::to($data['email'])->send(new UserRegister($data));
 
         $user->addMedia($data['file1']->path())
             ->setFileName($data['file1']->getClientOriginalName())
@@ -135,10 +131,17 @@ class RegisterController extends Controller
             ->setFileName($data['file3']->getClientOriginalName())
             ->toMediaCollection('upload_files');
 
+
+        $adminEmails = User::where('is_admin', 1)->pluck('email')->toArray();
+
+        Mail::to($adminEmails)->send(new UserRegisterAdmin($user));
+
+
         return $user;
     }
 
-    public function checkIfExists(Request $request) {
+    public function checkIfExists(Request $request)
+    {
         $email = $request->get('email', null);
         $username = $request->get('username', null);
 
@@ -149,7 +152,7 @@ class RegisterController extends Controller
         }
 
         if ($email) {
-            if(optional(User::where('email', $email)->first())->exists()) {
+            if (optional(User::where('email', $email)->first())->exists()) {
                 return response(['value' => true]);
             }
         }
