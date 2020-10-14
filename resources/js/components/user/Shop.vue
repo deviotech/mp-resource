@@ -10,12 +10,6 @@
         <h3>Brands</h3>
         <div class="row ml-1 mt-1">
           <div v-for="brand in brands" :key="brand.value">
-            <!-- <button
-              class="mr-5 mb-5 filter_button"
-              @click="filterproduct(brand.value)"
-            >
-              {{ brand.text }}
-            </button> -->
             <div class="button-group-pills text-center" data-toggle="buttons">
               <label class="btn btn-default">
                 <input
@@ -33,12 +27,6 @@
         <h3>Categories</h3>
         <div class="row ml-1 mt-1">
           <div v-for="category in categories" :key="category.value">
-            <!-- <button
-              class="mr-5 mb-5 filter_button"
-              @click="category_filter(category.value)"
-            >
-              {{ category.text }}
-            </button> -->
             <div class="button-group-pills text-center" data-toggle="buttons">
               <label class="btn btn-default">
                 <input
@@ -217,30 +205,6 @@ export default {
             value: item.id,
           });
         });
-      });
-    },
-    filterproduct($value) {
-      axios.get(`/back/filterproduct/${$value}`).then((response) => {
-        this.multiselect[0].brand_id = $value;
-        this.sortfilterdata[0].brand_id = $value;
-        this.items = response.data.data;
-        //console.log(this.items);
-      });
-    },
-    category_filter($value) {
-      axios.get(`/back/category_filter/${$value}`).then((response) => {
-        this.multiselect[0].category_id = $value;
-        this.sortfilterdata[0].category_id = $value;
-        this.items = response.data.data;
-        //console.log(this.items);
-      });
-    },
-    variation_filter($value) {
-      axios.get(`/back/variation_filter/${$value}`).then((response) => {
-        this.multiselect[0].variation_id = $value;
-        this.sortfilterdata[0].variation_id = $value;
-        this.items = response.data.data;
-        //console.log(this.items);
       });
     },
     reset() {

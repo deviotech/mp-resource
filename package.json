@@ -29,6 +29,7 @@
         "bootstrap": "^4.5.2",
         "mdbootstrap": "^4.19.1",
         "vue-dropdowns": "^1.1.1",
+        "vue-multiselect": "^2.1.6",
         "vue-sanitize": "^0.2.0",
         "vue-select": "^3.10.8",
         "vue-toasted": "^1.1.28",

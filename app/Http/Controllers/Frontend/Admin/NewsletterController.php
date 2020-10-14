@@ -31,6 +31,6 @@ class NewsletterController extends Controller
                 ]
             ]);
         }
-        return response(['data' => "The Newsletter Is Send To Customer"]);
+        return response(['data' => 'The Newsletter Is Send To Customer']);
     }
 }

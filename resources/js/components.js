@@ -4,6 +4,7 @@ import { VueEditor } from "vue2-editor";
 import Toasted from 'vue-toasted';
 import VueSanitize from "vue-sanitize";
 import dropdown from 'vue-dropdowns';
+import Multiselect from 'vue-multiselect'
 
 import Profile from "./components/user/profile";
 import Login from './components/auth/Login.vue';
@@ -75,6 +76,7 @@ Vue.component('preorder' , PreOrder);
 Vue.component('vue-editor',VueEditor);
 
 Vue.use(VueSanitize);
+Vue.component('multiselect', Multiselect)
 
 Vue.component('',Toasted);
 Vue.config.productionTip = false

@@ -2,17 +2,13 @@
   <div class="container">
     <form>
       <div class="form-group col-md-12">
-        <label for="exampleFormControlSelect2">Multiple select</label>
-        <select
-          multiple
+         <v-select
+         multiple
           v-model="emailList"
-          class="form-control"
-          id="exampleFormControlSelect2"
-        >
-          <option v-for="list in lists" v-bind:key="list.email">
-            {{ list.email }}
-          </option>
-        </select>
+          :items="lists"
+          label="Select Multiple Email"
+          outlined
+          dense></v-select>
       </div>
       <div class="form-group col-md-12">
         <label for="exampleFormControlInput1">Subject</label>
@@ -58,7 +54,12 @@ export default {
       axios
         .get("/admin/newsletter_list")
         .then((response) => {
-          this.lists = response.data.data;
+          this.lists = response.data.data.map((item) => {
+          return (item = {
+            text: item.email,
+            value: item.email,
+          });
+        });
         })
         .catch((error) => {
           console.log(error.message);
@@ -69,7 +70,6 @@ export default {
         Subject: this.subject,
         EmailList: this.emailList,
         Description: this.description,
-        // product_id: this.product_detail,
       };
     },
     SendEmail() {
